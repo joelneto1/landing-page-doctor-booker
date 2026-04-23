@@ -1,0 +1,23 @@
+# Claude Code local state
+.claude/
+
+# Design handoff source materials (not part of deploy)
+uploads/
+
+# Bundler exports from Claude Design (not used at runtime)
+Morning Unclog Method - Standalone.html
+Morning Unclog Method (standalone-src).html
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log

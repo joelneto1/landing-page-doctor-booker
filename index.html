@@ -1,0 +1,1841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Morning Unclog Protocol — Dr. Booker, M.D.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:         #F5EFE4;       /* warm beige */
+    --bg-2:       #EFE6D2;       /* deeper beige */
+    --bg-card:    #FBF7EE;       /* cream card */
+    --ink:        #1F3D2E;       /* deep forest - primary */
+    --ink-2:      #0F2A1F;
+    --green:      #2F6B3E;       /* accent green */
+    --green-2:    #245530;
+    --gold:       #B08A4A;       /* editorial gold label */
+    --gold-2:     #8B6A33;
+    --tan:        #8B7355;
+    --line:       #D9CFB8;
+    --muted:      #5B6A5E;
+    --warn:       #B5482E;       /* warm red for urgency (used sparingly) */
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter', system-ui, sans-serif;
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family:'Libre Caslon Text','Lora', Georgia, serif}
+  .eyebrow{
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+  }
+  h1,h2,h3{font-family:'Libre Caslon Text','Lora',Georgia,serif;color:var(--ink);font-weight:400;letter-spacing:-0.01em;text-wrap:balance}
+  h1{font-size:64px;line-height:1.05;margin:0}
+  h2{font-size:44px;line-height:1.1;margin:0}
+  h3{font-size:24px;line-height:1.25;margin:0}
+  p{margin:0;text-wrap:pretty}
+
+  a{color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:sticky;top:0;z-index:40;
+    background:rgba(245,239,228,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid rgba(31,61,46,.08);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Libre Caslon Text',serif;font-size:20px;color:var(--ink)}
+  .brand .mark{
+    width:32px;height:32px;border-radius:50%;
+    background:var(--ink);color:var(--bg);
+    display:grid;place-items:center;font-size:14px;font-weight:700;
+    font-family:'Libre Caslon Text',serif;
+  }
+  .nav-links{display:flex;gap:32px;font-size:14px;color:var(--ink);font-weight:500}
+  .nav-links a{text-decoration:none;opacity:.8}
+  .nav-links a:hover{opacity:1}
+
+  /* ---------- BUTTONS ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--green);color:#fff;
+    padding:16px 28px;border-radius:8px;
+    font-family:'Inter',sans-serif;font-weight:600;font-size:17px;
+    text-decoration:none;border:none;cursor:pointer;
+    box-shadow: 0 1px 0 rgba(255,255,255,.25) inset, 0 6px 18px rgba(47,107,62,.25);
+    transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+    letter-spacing:.01em;
+  }
+  .btn:hover{background:var(--green-2);transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.25) inset, 0 10px 24px rgba(47,107,62,.3)}
+  .btn-lg{padding:20px 34px;font-size:19px}
+  .btn-arrow{font-size:18px;transform:translateY(0)}
+
+  /* ---------- COUNTDOWN BAR ---------- */
+  .urgency-bar{
+    background:var(--ink-2);
+    color:#F5EFE4;
+    font-size:14px;
+    font-weight:500;
+  }
+  .urgency-inner{
+    display:flex;align-items:center;justify-content:center;gap:16px;padding:10px 16px;
+    flex-wrap:wrap;text-align:center;
+  }
+  .urgency-inner .dot{width:8px;height:8px;border-radius:50%;background:#E8B84A;box-shadow:0 0 0 4px rgba(232,184,74,.2);animation:pulse 1.6s infinite ease-in-out}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .cd{display:inline-flex;gap:6px;font-family:'Inter',sans-serif;font-variant-numeric:tabular-nums;font-weight:600}
+  .cd b{background:rgba(255,255,255,.08);padding:2px 8px;border-radius:4px;color:#F5EFE4}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 80px;position:relative;overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;inset:auto -20% -200px -20%;height:500px;
+    background:radial-gradient(ellipse at center, rgba(47,107,62,.08), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:center;position:relative}
+  .hero p.lead{font-size:19px;color:var(--muted);line-height:1.65;max-width:520px;margin:20px 0 28px}
+  .price-line{display:flex;align-items:baseline;gap:14px;margin:4px 0 28px;font-family:'Libre Caslon Text',serif}
+  .price-line .old{font-size:26px;color:var(--tan);text-decoration:line-through}
+  .price-line .new{font-size:48px;color:var(--ink);font-weight:700;letter-spacing:-.01em}
+  .hero ul.pt{list-style:none;padding:0;margin:22px 0 0;font-size:15px;color:var(--muted);line-height:1.8}
+  .hero ul.pt li{display:flex;gap:10px;align-items:center}
+  .hero ul.pt li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+  /* ---------- BOOK MOCKUP ---------- */
+  .book-wrap{position:relative;display:flex;justify-content:center;perspective:1400px}
+  .book{
+    width:400px;height:560px;position:relative;
+    transform:rotateY(-6deg) rotateX(2deg);
+    box-shadow:
+      0 40px 80px -20px rgba(15,42,31,.45),
+      0 20px 40px -15px rgba(15,42,31,.3),
+      -8px 0 0 0 rgba(0,0,0,.15),
+      inset 2px 0 6px rgba(0,0,0,.3);
+    border-radius:4px 8px 8px 4px;
+    background:var(--ink-2);
+    overflow:hidden;
+  }
+  .book::before{
+    /* spine shadow */
+    content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;
+    background:linear-gradient(90deg, rgba(0,0,0,.35), transparent);
+  }
+  .book-cover{
+    position:absolute;inset:0;
+    padding:32px 28px;
+    display:flex;flex-direction:column;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(176,138,74,.18), transparent 55%),
+      linear-gradient(180deg, #1F3D2E 0%, #152B22 100%);
+    color:#EFE6D2;
+  }
+  .book-topband{
+    font-family:'Inter',sans-serif;
+    font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:#C9A961;text-align:center;border-top:1px solid rgba(201,169,97,.4);border-bottom:1px solid rgba(201,169,97,.4);
+    padding:6px 0;margin-bottom:14px;font-weight:600;
+  }
+  .book-byline{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:14px;color:#C9A961;text-align:center}
+  .book-byline b{font-style:normal;font-weight:400}
+  .book-title{
+    font-family:'Libre Caslon Text',serif;
+    font-size:34px;line-height:.98;text-align:center;
+    color:#F5EFE4;margin-top:6px;letter-spacing:.01em;
+  }
+  .book-title .big{display:block;font-size:46px;letter-spacing:.02em}
+  .book-img{
+    margin-top:16px;flex:1;border-radius:3px;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(229,217,188,.1), transparent 70%),
+      linear-gradient(180deg, #3a5c4a 0%, #2a4535 100%);
+    position:relative;overflow:hidden;
+    display:flex;align-items:flex-end;justify-content:center;
+  }
+  .book-img img.doc-photo-book{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;
+    transform:scale(1.25);transform-origin:center 30%;
+    filter:saturate(.92) contrast(1.02);
+  }
+  .book-img::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(31,61,46,.1) 0%, transparent 30%, transparent 55%, rgba(15,42,31,.55) 100%);
+    pointer-events:none;
+  }
+  /* Doctor placeholder illustration */
+  .doc-placeholder{
+    width:100%;height:100%;position:relative;
+    background:
+      radial-gradient(circle at 50% 35%, #D4B896 0 28%, transparent 28.5%),
+      radial-gradient(ellipse at 50% 80%, #FFFFFF 0 50%, transparent 50.5%),
+      linear-gradient(180deg, #4a7858 0, #2F5540 100%);
+  }
+  .doc-placeholder::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(transparent 60%, rgba(0,0,0,.35));
+  }
+  .book-quote{
+    position:absolute;top:54%;right:4px;width:92px;font-size:8px;line-height:1.45;color:#F5EFE4;
+    font-family:'Libre Caslon Text',serif;font-style:italic;z-index:2;
+    text-align:right;
+    background:rgba(21,43,34,.72);
+    backdrop-filter:blur(4px);
+    padding:8px 10px;
+    border-radius:3px;
+    border-left:2px solid #C9A961;
+    box-shadow:0 4px 14px rgba(15,42,31,.4);
+  }
+  .book-bottomband{
+    margin-top:14px;text-align:center;font-family:'Libre Caslon Text',serif;
+    color:#F5EFE4;font-size:13px;line-height:1.35;letter-spacing:.04em;
+  }
+  .book-bottomband b{display:block;font-weight:400}
+
+  /* Book floating badges */
+  .float-badge{
+    position:absolute;background:var(--bg-card);border:1px solid var(--line);
+    border-radius:12px;padding:12px 16px;box-shadow:0 10px 30px rgba(15,42,31,.12);
+    font-size:13px;display:flex;align-items:center;gap:10px;
+    font-family:'Inter',sans-serif;
+  }
+  .float-badge .ic{
+    width:34px;height:34px;border-radius:50%;background:var(--ink);color:#F5EFE4;
+    display:grid;place-items:center;
+  }
+  .badge-1{top:20px;left:-10px;transform:rotate(-3deg)}
+  .badge-2{bottom:20px;right:-110px;transform:rotate(2deg)}
+
+  /* ========== ANIMATIONS ========== */
+  /* Fade-up on scroll */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+  .reveal.d1{transition-delay:.08s}
+  .reveal.d2{transition-delay:.16s}
+  .reveal.d3{transition-delay:.24s}
+  @media (prefers-reduced-motion: reduce){
+    .reveal,.reveal.in{opacity:1;transform:none;transition:none}
+    .book-wrap{animation:none !important}
+    .book-parallax{transform:none !important}
+    .artery-layer-top{opacity:1 !important;transition:none}
+    .btn-lg::after{display:none}
+    .sticky-cta.show .btn{animation:none}
+    .testi{transform:none !important;transition:none}
+  }
+
+  /* Book cover subtle float — wraps the book so we don't clobber its 3D transform */
+  @keyframes bookFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-10px)}
+  }
+  .book-wrap{animation:bookFloat 6s ease-in-out infinite}
+
+  /* Enhanced card hover (chapters, bonus, testi, faq) */
+  .chapter,.bonus-card,.testi,.faq-item{
+    transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s cubic-bezier(.2,.7,.2,1), border-color .2s ease;
+  }
+  .chapter:hover{transform:translateY(-4px);box-shadow:0 18px 40px -15px rgba(15,42,31,.18)}
+  .bonus-card:hover{transform:translateY(-6px);box-shadow:0 22px 45px -18px rgba(15,42,31,.22);border-color:rgba(201,169,97,.4)}
+  .testi:hover{transform:translateY(-4px);box-shadow:0 16px 36px -14px rgba(15,42,31,.16);border-color:rgba(47,107,62,.2)}
+  .ba-card{transition:transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s cubic-bezier(.2,.7,.2,1)}
+  .ba-card:hover{transform:translateY(-3px)}
+
+  /* CTA button micro-interaction */
+  .btn{transition:transform .2s cubic-bezier(.2,.7,.2,1), box-shadow .2s ease, background .2s ease}
+  .btn:hover{transform:translateY(-2px)}
+
+  /* ---------- SECTIONS BASE ---------- */
+  section{padding:90px 0;position:relative}
+  .section-alt{background:var(--bg-2)}
+  .section-dark{background:var(--ink);color:#EFE6D2}
+  .section-dark h2,.section-dark h3{color:#F5EFE4}
+  .section-dark .eyebrow{color:#C9A961}
+
+  .section-head{text-align:center;max-width:780px;margin:0 auto 50px}
+  .section-head h2{margin:14px 0 18px}
+  .section-head p{color:var(--muted);font-size:19px;line-height:1.65}
+  .section-dark .section-head p{color:rgba(239,230,210,.8)}
+
+  /* ---------- SYMPTOM CHECKLIST ---------- */
+  .checklist-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px 40px;max-width:900px;margin:0 auto;
+  }
+  .check-item{
+    display:flex;gap:18px;align-items:flex-start;
+    background:var(--bg-card);border:1px solid var(--line);border-radius:12px;
+    padding:20px 22px;
+    transition:all .2s ease;cursor:pointer;
+  }
+  .check-item:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,42,31,.06)}
+  .check-box{
+    width:28px;height:28px;border:2px solid var(--line);border-radius:6px;flex-shrink:0;
+    display:grid;place-items:center;transition:all .2s ease;
+    background:#fff;margin-top:1px;
+  }
+  .check-item.checked .check-box{background:var(--green);border-color:var(--green)}
+  .check-item.checked .check-box svg{opacity:1}
+  .check-box svg{opacity:0;transition:opacity .15s ease}
+  .check-item .txt{font-size:16px;color:var(--ink);line-height:1.45}
+  .check-item .txt b{font-weight:600}
+
+  .checklist-cta{text-align:center;margin-top:36px;font-size:17px;color:var(--muted);font-style:italic;font-family:'Libre Caslon Text',serif}
+
+  /* ---------- CITATION / PROMISE ---------- */
+  .promise{
+    background:var(--ink);color:#F5EFE4;padding:80px 0;position:relative;overflow:hidden;
+  }
+  .promise::before,.promise::after{
+    content:'“';position:absolute;font-family:'Libre Caslon Text',serif;
+    font-size:240px;color:rgba(201,169,97,.12);line-height:1;z-index:0;
+  }
+  .promise::before{top:20px;left:40px}
+  .promise::after{content:'”';bottom:-80px;right:40px}
+  .promise .wrap{position:relative;z-index:1}
+  .promise-grid{display:grid;grid-template-columns:.9fr 1.3fr;gap:60px;align-items:center}
+  .promise-portrait{
+    aspect-ratio:4/5;border-radius:10px;overflow:hidden;position:relative;
+    box-shadow:0 30px 60px rgba(0,0,0,.4);
+    border:1px solid rgba(201,169,97,.2);
+  }
+  .promise-portrait img{width:100%;height:100%;object-fit:cover;display:block;filter:contrast(1.05)}
+  .promise-portrait::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,transparent 60%,rgba(0,0,0,.3));
+  }
+  .promise-inner{max-width:none}
+  .promise blockquote{
+    font-family:'Libre Caslon Text',serif;font-style:italic;font-size:34px;line-height:1.3;
+    margin:0 0 24px;color:#F5EFE4;font-weight:400;text-wrap:balance;
+  }
+  .promise cite{font-style:normal;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:#C9A961;display:block}
+  .promise cite .role{display:block;font-size:11px;letter-spacing:.15em;color:rgba(239,230,210,.5);margin-top:4px;font-weight:400}
+
+  /* Ritual section */
+  .ritual{background:var(--cream);padding:100px 0;position:relative}
+  .ritual-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .ritual-photo{
+    position:relative;aspect-ratio:4/5;border-radius:12px;overflow:hidden;
+    box-shadow:0 30px 60px rgba(31,61,46,.18);
+  }
+  .ritual-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .ritual-tag{
+    position:absolute;left:18px;bottom:18px;
+    background:rgba(15,42,31,.9);color:#F5EFE4;
+    padding:10px 16px;border-radius:999px;
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+    display:inline-flex;align-items:center;gap:10px;
+    backdrop-filter:blur(8px);
+  }
+  .ritual-tag .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  .ritual-lead{font-size:19px;line-height:1.6;margin:22px 0 34px;color:var(--ink-2);max-width:520px}
+  .ritual-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:22px}
+  .ritual-list li{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start}
+  .rnum{
+    font-family:'Libre Caslon Text',serif;font-size:30px;color:var(--gold);
+    line-height:1;padding-top:2px;font-style:italic;
+    min-width:52px;border-right:1px solid rgba(201,169,97,.35);padding-right:18px;
+  }
+  .ritual-list h4{
+    font-family:'Libre Caslon Text',serif;font-size:21px;margin:0 0 6px;color:var(--ink);
+    font-weight:400;
+  }
+  .ritual-list p{margin:0;font-size:15px;line-height:1.55;color:var(--ink-2)}
+
+  /* Clinical strip */
+  .clinical{
+    background:var(--ink);color:#F5EFE4;padding:0;overflow:hidden;position:relative;
+  }
+  .clinical-grid{display:grid;grid-template-columns:1.1fr 1fr;min-height:420px}
+  .clinical-photo{position:relative;overflow:hidden}
+  .clinical-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.9)}
+  .clinical-photo::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(90deg, transparent 50%, rgba(15,42,31,.8) 100%);
+  }
+  .clinical-body{display:flex;flex-direction:column;justify-content:center;padding:70px 60px}
+  .clinical-body .eyebrow{color:#C9A961}
+  .clinical-body h2{color:#F5EFE4;margin:14px 0 22px;font-size:38px;line-height:1.15}
+  .clinical-body p{color:rgba(239,230,210,.8);font-size:16px;line-height:1.7;margin-bottom:14px}
+  .clinical-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px;padding-top:28px;border-top:1px solid rgba(201,169,97,.25)}
+  .clinical-stats .stat-num{font-family:'Libre Caslon Text',serif;font-size:42px;color:var(--gold);line-height:1;font-weight:700}
+  .clinical-stats .stat-lbl{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:rgba(239,230,210,.6);margin-top:6px;line-height:1.3}
+
+  /* ---------- SCIENCE / BEFORE-AFTER ---------- */
+  .ba-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:36px;align-items:stretch;max-width:1060px;margin:0 auto}
+  .ba-card{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:16px;
+    padding:36px 32px;
+  }
+  .ba-card.before{border-color:rgba(181,72,46,.2)}
+  .ba-card.after{border-color:rgba(47,107,62,.25);box-shadow:0 10px 40px rgba(47,107,62,.1)}
+  .ba-label{font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:700;margin-bottom:14px}
+  .ba-card.before .ba-label{color:var(--warn)}
+  .ba-card.after .ba-label{color:var(--green)}
+  .ba-card h3{font-size:22px;margin-bottom:18px;color:var(--ink)}
+  .ba-card ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
+  .ba-card ul li{font-size:15px;color:var(--muted);display:flex;gap:12px;line-height:1.5}
+  .ba-card ul li .glyph{width:20px;flex-shrink:0;text-align:center;margin-top:1px;font-weight:700}
+  .ba-card.before li .glyph{color:var(--warn)}
+  .ba-card.after li .glyph{color:var(--green)}
+  .ba-arrow{
+    display:grid;place-items:center;color:var(--gold);font-size:40px;
+    font-family:'Libre Caslon Text',serif;
+  }
+
+  /* artery illustration */
+  .artery-vis{
+    margin:0 auto 22px;width:100%;height:auto;aspect-ratio:4/3;display:block;
+    border-radius:10px;overflow:hidden;
+    background:#F4E9D3;
+    object-fit:cover;object-position:center;
+    box-shadow:inset 0 0 0 1px rgba(31,61,46,.08);
+  }
+
+  .ba-footnote{text-align:center;margin-top:40px;font-size:14px;color:var(--muted);max-width:640px;margin-left:auto;margin-right:auto;font-style:italic}
+
+  /* CHAPTER “More Inside” teaser card */
+  .chapter-more{
+    background:var(--ink) !important;border-color:var(--ink) !important;color:#EFE6D2 !important;
+    align-items:start !important;
+  }
+  .chap-more-badge{
+    background:linear-gradient(180deg,#C9A961 0,#8B6A33 100%);
+    display:grid;place-items:center;
+    color:#1F3D2E;font-family:'Libre Caslon Text',serif;font-size:48px;font-style:italic;
+    font-weight:700;letter-spacing:.02em;
+  }
+  .chap-more-list{grid-template-columns:1fr 1fr 1fr !important}
+  .chap-more-list li{color:rgba(239,230,210,.8)}
+  .chap-more-list li::before{background:#C9A961}
+
+  /* ---------- CHAPTERS ---------- */
+  .chapter{
+    display:grid;grid-template-columns:160px 1fr;gap:28px;align-items:flex-start;
+    background:var(--bg-card);border:1px solid var(--line);border-radius:14px;
+    padding:28px;margin-bottom:20px;transition:all .2s ease;
+  }
+  .chapter:hover{border-color:var(--green);transform:translateY(-1px)}
+  .chap-img{
+    width:160px;height:160px;border-radius:10px;flex-shrink:0;
+    background-size:cover;background-position:center;
+    position:relative;overflow:hidden;
+  }
+  .chap-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(15,42,31,.25))}
+  .chap-eyebrow{font-size:12px;letter-spacing:.22em;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:6px}
+  .chap-title{font-family:'Libre Caslon Text',serif;font-size:24px;margin:0 0 10px;color:var(--ink);font-weight:700}
+  .chap-desc{color:var(--muted);font-size:15px;line-height:1.55;margin-bottom:14px}
+  .chap-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 24px}
+  .chap-list li{font-size:14px;color:var(--muted);padding-left:16px;position:relative;line-height:1.5}
+  .chap-list li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+
+  /* ---------- BONUS CARDS ---------- */
+  .bonus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .bonus-card{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:14px;
+    padding:28px;position:relative;overflow:hidden;
+  }
+  .bonus-card .tag{
+    position:absolute;top:0;right:18px;background:var(--gold);color:#fff;
+    padding:5px 14px;font-size:11px;letter-spacing:.2em;font-weight:700;
+    border-radius:0 0 6px 6px;
+  }
+  .bonus-cover{
+    width:100%;aspect-ratio: 3/4;border-radius:8px;margin-bottom:18px;
+    position:relative;overflow:hidden;
+    box-shadow:0 14px 32px rgba(15,42,31,.18);
+    background-size:cover;background-position:center;background-repeat:no-repeat;
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .bonus-card:hover .bonus-cover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(15,42,31,.22)}
+  .bonus-cover.b1{background-image:url('images/bonus-1.jpeg')}
+  .bonus-cover.b2{background-image:url('images/bonus-2.jpeg')}
+  .bonus-cover.b3{background-image:url('images/bonus-3.jpeg')}
+  /* legacy text overlays hidden — titles now baked into the image */
+  .bonus-cover .bnum,
+  .bonus-cover .btitle,
+  .bonus-cover .bsub{display:none}
+  .bonus-card h3{font-size:22px;margin-bottom:10px;line-height:1.15;color:var(--ink)}
+  .bonus-card .desc{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+  .bonus-card .val{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid var(--line);padding-top:14px;margin-top:auto;
+    font-family:'Libre Caslon Text',serif;
+  }
+  .bonus-card .val .was{color:var(--tan);text-decoration:line-through;font-size:16px}
+  .bonus-card .val .now{color:var(--green);font-weight:700;font-size:18px;letter-spacing:.02em}
+
+  /* ---------- VALUE STACK ---------- */
+  .stack-card{
+    max-width:680px;margin:0 auto;
+    background:var(--ink);color:#F5EFE4;border-radius:18px;
+    padding:56px 48px;position:relative;overflow:hidden;
+    box-shadow:0 30px 80px -20px rgba(15,42,31,.35);
+  }
+  .stack-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:4px;
+    background:linear-gradient(90deg,var(--gold),#E8B84A,var(--gold));
+  }
+  .stack-card .eyebrow{color:#C9A961}
+  .stack-card h2{color:#F5EFE4;font-size:32px;text-align:center;margin-bottom:30px}
+  .stack-rows{margin:30px 0;border-top:1px solid rgba(239,230,210,.15)}
+  .stack-row{
+    display:flex;justify-content:space-between;align-items:baseline;
+    padding:16px 0;border-bottom:1px solid rgba(239,230,210,.15);
+    font-family:'Libre Caslon Text',serif;font-size:18px;
+  }
+  .stack-row .val{color:#C9A961}
+  .stack-row.total{font-size:20px;padding-top:20px;font-weight:700}
+  .stack-row.total .val{text-decoration:line-through;color:#EFE6D2}
+  .stack-price{text-align:center;margin-top:28px;font-family:'Libre Caslon Text',serif}
+  .stack-price .old{color:#C9A961;text-decoration:line-through;font-size:24px;margin-right:10px}
+  .stack-price .now{color:#fff;font-size:56px;font-weight:700;letter-spacing:-.01em}
+  .stack-price .save{display:inline-block;margin-left:12px;color:#E8B84A;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;vertical-align:middle}
+  .stack-cta{text-align:center;margin-top:24px}
+  .stack-fine{text-align:center;margin-top:16px;font-size:13px;color:rgba(239,230,210,.6)}
+
+  /* ---------- GUARANTEE ---------- */
+  .guarantee{
+    max-width:860px;margin:80px auto 0;
+    background:var(--bg-card);border:1px solid var(--line);border-radius:16px;
+    padding:40px 48px;display:grid;grid-template-columns:auto 1fr;gap:36px;align-items:center;
+  }
+  .seal{
+    width:150px;height:150px;border-radius:50%;
+    background:var(--ink);color:#F5EFE4;display:grid;place-items:center;text-align:center;
+    padding:14px;flex-shrink:0;position:relative;
+    box-shadow:0 10px 30px rgba(15,42,31,.2);
+  }
+  .seal::before{
+    content:"";position:absolute;inset:6px;border-radius:50%;border:1px dashed rgba(201,169,97,.5);
+  }
+  .seal .num{font-family:'Libre Caslon Text',serif;font-size:38px;line-height:1;color:#C9A961;font-weight:700}
+  .seal .lbl{font-size:10px;letter-spacing:.22em;text-transform:uppercase;margin-top:4px;color:#F5EFE4}
+  .seal .sub{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#C9A961;margin-top:2px}
+  .guarantee h3{font-family:'Libre Caslon Text',serif;font-size:26px;margin-bottom:12px;color:var(--ink)}
+  .guarantee p{color:var(--muted);font-size:15px;line-height:1.6}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .testi{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:14px;
+    padding:30px 28px;display:flex;flex-direction:column;gap:16px;
+  }
+  .testi-top{display:flex;align-items:center;gap:14px}
+  .testi-ava{
+    width:58px;height:58px;border-radius:50%;flex-shrink:0;
+    background-size:cover;background-position:center;
+    border:2px solid var(--gold);padding:2px;
+  }
+  .testi-ava-inner{width:100%;height:100%;border-radius:50%;background-size:cover;background-position:center;overflow:hidden}
+  .testi-ava-inner img{width:100%;height:100%;object-fit:cover;object-position:center 30%;border-radius:50%;display:block}
+  .testi-name{font-family:'Inter',sans-serif;font-weight:700;font-size:16px;color:var(--ink);letter-spacing:-.005em}
+  .testi-meta{font-family:'Inter',sans-serif;font-size:13px;color:var(--gold);font-weight:500}
+  .testi-stars{color:#E8B84A;font-size:14px;letter-spacing:2px}
+  .testi blockquote{
+    margin:0;font-family:'Inter',sans-serif;font-style:normal;font-size:16px;line-height:1.6;color:var(--ink);font-weight:400;
+  }
+  .testi .result{
+    font-size:13px;color:var(--green);background:rgba(47,107,62,.08);border-radius:6px;
+    padding:10px 14px;font-weight:500;display:flex;gap:8px;align-items:center;
+  }
+
+  /* ---------- ABOUT DOCTOR ---------- */
+  .about{display:grid;grid-template-columns:.8fr 1.1fr;gap:60px;align-items:center;max-width:1060px;margin:0 auto}
+  .doc-photo{
+    aspect-ratio:4/5;border-radius:14px;overflow:hidden;position:relative;
+    background:linear-gradient(180deg,#5a7d66 0,#2F5540 100%);
+    box-shadow:0 20px 50px rgba(15,42,31,.2);
+  }
+  .doc-photo img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;
+  }
+  .doc-photo-frame-overlay{
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, transparent 60%, rgba(15,42,31,.15) 100%);
+    pointer-events:none;
+  }
+  .doc-photo-caption{
+    position:absolute;left:18px;bottom:18px;right:18px;
+    display:flex;align-items:center;gap:10px;
+    color:#F5EFE4;font-family:'Libre Caslon Text',serif;font-style:italic;font-size:13px;
+    text-shadow:0 2px 8px rgba(0,0,0,.5);
+  }
+  .doc-photo-caption::before{
+    content:"";display:block;width:24px;height:1px;background:#C9A961;flex-shrink:0;
+  }
+  .about h2{margin-bottom:12px}
+  .about .credentials{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+  .about .cred{
+    font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+    background:var(--bg-2);border:1px solid var(--line);color:var(--ink);
+    padding:6px 12px;border-radius:20px;
+  }
+  .about p{color:var(--muted);font-size:17px;line-height:1.7;margin-bottom:14px}
+  .about p b{color:var(--ink);font-weight:600}
+  .about .sig{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:24px;color:var(--ink);margin-top:4px}
+  .sig-row{display:flex;align-items:center;gap:18px;margin-top:22px;padding-top:22px;border-top:1px solid var(--line)}
+  .sig-headshot{
+    width:64px;height:64px;border-radius:50%;overflow:hidden;flex-shrink:0;
+    border:2px solid var(--gold);padding:2px;background:var(--gold);
+  }
+  .sig-headshot img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}
+  .sig-sub{font-size:13px;color:var(--muted);letter-spacing:.05em;margin-top:2px}
+
+  /* ---------- FAQ ---------- */
+  .faq-list{max-width:840px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+  .faq-item{
+    background:var(--bg-card);border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;transition:all .2s ease;
+  }
+  .faq-q{
+    width:100%;text-align:left;background:none;border:none;cursor:pointer;
+    padding:22px 26px;font-family:'Libre Caslon Text',serif;font-size:19px;color:var(--ink);font-weight:700;
+    display:flex;justify-content:space-between;align-items:center;gap:20px;
+  }
+  .faq-q .ic{font-family:'Inter',sans-serif;font-size:28px;color:var(--gold);font-weight:300;transition:transform .2s ease;line-height:1}
+  .faq-item.open .ic{transform:rotate(45deg)}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease;color:var(--muted);font-size:15px;line-height:1.65;padding:0 26px}
+  .faq-item.open .faq-a{max-height:400px;padding:0 26px 24px}
+
+  /* ---------- FINAL CTA ---------- */
+  .final{
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(201,169,97,.15), transparent 60%),
+      var(--ink);
+    text-align:center;padding:110px 0 90px;color:#F5EFE4;
+  }
+  .final h2{color:#F5EFE4;font-size:54px;margin-bottom:20px}
+  .final .tagline{font-family:'Libre Caslon Text',serif;font-style:italic;font-size:24px;color:#C9A961;margin-bottom:24px}
+  .final p.lede{max-width:640px;margin:0 auto 32px;font-size:17px;color:rgba(239,230,210,.85);line-height:1.65}
+  .final-price{margin:30px 0 10px;font-family:'Libre Caslon Text',serif}
+  .final-price .o{color:#C9A961;text-decoration:line-through;font-size:28px;margin-right:12px}
+  .final-price .n{color:#fff;font-size:72px;font-weight:700;letter-spacing:-.02em}
+  .final-price .save{
+    display:inline-block;margin-left:14px;padding:8px 16px;
+    background:#2F8F48;color:#fff;border-radius:999px;
+    font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;
+    vertical-align:middle;transform:translateY(-12px);
+    box-shadow:0 6px 20px rgba(47,143,72,.35);
+  }
+  .final .ebtag{font-size:11px;letter-spacing:.3em;color:#C9A961;font-weight:700;display:inline-block;margin-bottom:8px}
+  .trust-row{display:flex;justify-content:center;gap:30px;margin-top:32px;flex-wrap:wrap;font-size:13px;color:rgba(239,230,210,.7)}
+  .trust-row span{display:flex;align-items:center;gap:8px}
+  .trust-row span::before{content:"✓";color:var(--gold);font-weight:700}
+
+  /* payment seals */
+  .pay-seals{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:28px;align-items:center}
+  .pay-seals .seal-box{
+    background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:6px;
+    padding:8px 14px;font-size:12px;color:rgba(239,230,210,.75);font-weight:600;letter-spacing:.06em;
+    display:flex;align-items:center;gap:6px;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:#0B1F17;color:rgba(239,230,210,.6);padding:40px 0 30px;text-align:center;font-size:13px;line-height:1.7}
+  footer a{color:#C9A961;text-decoration:none}
+  footer .disclaimer{max-width:760px;margin:16px auto 0;font-size:12px;color:rgba(239,230,210,.4);line-height:1.55}
+
+  /* ---------- STICKY CTA BAR ---------- */
+  .sticky-cta{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#0B1F17;border-top:1px solid rgba(201,169,97,.2);
+    padding:12px 24px;z-index:50;
+    display:flex;align-items:center;justify-content:center;gap:20px;
+    transform:translateY(110%);transition:transform .3s ease;
+    color:#F5EFE4;
+  }
+  .sticky-cta.show{transform:translateY(0)}
+  .sticky-cta .st-title{font-family:'Libre Caslon Text',serif;font-size:17px;font-weight:700}
+  .sticky-cta .st-price{font-family:'Libre Caslon Text',serif}
+  .sticky-cta .st-price .o{color:#C9A961;text-decoration:line-through;font-size:15px;margin-right:8px}
+  .sticky-cta .st-price .n{color:#fff;font-size:22px;font-weight:700}
+  .sticky-cta .btn{padding:12px 22px;font-size:15px}
+  .sticky-cta .hidesm{display:inline}
+
+  /* ========== NEW SUBTLE ANIMATIONS (50+ friendly) ========== */
+
+  /* Parallax wrapper for hero book — transform set by JS */
+  .book-parallax{will-change:transform;transform:translate3d(0,0,0)}
+
+  /* Artery "healing" crossfade stack on the After card */
+  .artery-stack{
+    position:relative;width:100%;aspect-ratio:4/3;
+    margin:0 auto 22px;border-radius:10px;overflow:hidden;
+    box-shadow:inset 0 0 0 1px rgba(31,61,46,.08);
+    background:#F4E9D3;
+  }
+  .artery-stack .artery-vis{
+    position:absolute;inset:0;margin:0;border-radius:0;
+    width:100%;height:100%;
+  }
+  .artery-layer-top{opacity:0;transition:opacity 1.8s cubic-bezier(.4,0,.2,1) .35s}
+  .ba-card.after.morphed .artery-layer-top{opacity:1}
+
+  /* Testimonial card subtle 3D tilt (transform set inline by JS) */
+  .testi-grid{perspective:1200px}
+  .testi{transform-style:preserve-3d;will-change:transform}
+
+  /* Primary CTA shimmer — thin glint every 6.5s, paused on hover */
+  .btn-lg{position:relative;overflow:hidden}
+  .btn-lg::after{
+    content:"";position:absolute;top:0;left:-40%;width:35%;height:100%;
+    background:linear-gradient(100deg, transparent 0%, rgba(255,255,255,.22) 50%, transparent 100%);
+    transform:skewX(-18deg);
+    pointer-events:none;
+    animation: btnShimmer 6.5s cubic-bezier(.55,0,.45,1) infinite;
+  }
+  .btn-lg:hover::after{animation-play-state:paused}
+  @keyframes btnShimmer{
+    0%, 68% { left:-40% }
+    100% { left:140% }
+  }
+
+  /* Sticky CTA button soft pulse (single ring) when first shown */
+  .sticky-cta.show .btn{animation: stickyPulse 2s ease-out 1}
+  @keyframes stickyPulse{
+    0%   { box-shadow: 0 0 0 0 rgba(47,107,62,.5), 0 1px 0 rgba(255,255,255,.25) inset, 0 6px 18px rgba(47,107,62,.25) }
+    80%  { box-shadow: 0 0 0 12px rgba(47,107,62,0), 0 1px 0 rgba(255,255,255,.25) inset, 0 6px 18px rgba(47,107,62,.25) }
+    100% { box-shadow: 0 0 0 0 rgba(47,107,62,0),  0 1px 0 rgba(255,255,255,.25) inset, 0 6px 18px rgba(47,107,62,.25) }
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  /* Tablet + small laptop */
+  @media (max-width:900px){
+    h1{font-size:44px}
+    h2{font-size:32px}
+    h3{font-size:22px}
+    body{font-size:17px}
+    .wrap{padding:0 20px}
+    .nav-links{display:none}
+    .nav-inner{padding:14px 0}
+    .brand{font-size:16px;gap:8px;flex:1;min-width:0}
+    .brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .brand .mark{width:28px;height:28px;font-size:13px;flex-shrink:0}
+    .nav-inner{gap:14px}
+    .hero{padding:40px 0 50px}
+    .hero-grid{grid-template-columns:1fr;gap:50px}
+    .book{width:300px;height:420px}
+    .book-cover{padding:24px 22px}
+    .book-title{font-size:26px}
+    .book-title .big{font-size:34px}
+    .book-topband{font-size:9px;margin-bottom:12px}
+    .book-byline{font-size:12px}
+    .book-byline b{font-size:13px !important}
+    .book-quote{width:78px;font-size:7.5px;padding:6px 8px;top:52%}
+    .book-bottomband{font-size:11px;margin-top:10px}
+    .checklist-grid{grid-template-columns:1fr}
+    .ba-grid{grid-template-columns:1fr;gap:16px}
+    .ba-arrow{transform:rotate(90deg)}
+    .chapter{grid-template-columns:1fr}
+    .chap-img{width:100%;height:180px}
+    .chap-list{grid-template-columns:1fr}
+    /* More-inside teaser: smaller badge, no full-width block */
+    .chapter-more{display:block !important}
+    .chap-more-badge{
+      width:64px;height:64px;font-size:26px;border-radius:10px;margin-bottom:18px;
+    }
+    .chap-more-list{grid-template-columns:1fr 1fr !important;gap:6px 16px !important}
+    .bonus-grid{grid-template-columns:1fr}
+    .stack-card{padding:36px 22px}
+    .stack-price .now{font-size:42px}
+    .guarantee{grid-template-columns:1fr;text-align:center;padding:30px 22px;margin-top:50px}
+    .seal{margin:0 auto}
+    .testi-grid{grid-template-columns:1fr}
+    .about{grid-template-columns:1fr;gap:30px}
+    .promise-grid{grid-template-columns:1fr;gap:36px;text-align:center}
+    .promise-portrait{max-width:280px;margin:0 auto}
+    .promise{padding:70px 0}
+    .promise::before,.promise::after{font-size:140px}
+    .promise::before{top:10px;left:10px}
+    .promise::after{bottom:-50px;right:10px}
+    .ritual{padding:60px 0}
+    .ritual-grid{grid-template-columns:1fr;gap:40px}
+    .ritual-photo{max-width:420px;margin:0 auto}
+    .ritual-lead{font-size:17px;margin:18px 0 28px}
+    .rnum{font-size:24px;min-width:44px;padding-right:14px}
+    .clinical-grid{grid-template-columns:1fr}
+    .clinical-photo{aspect-ratio:16/10}
+    .clinical-photo::after{background:linear-gradient(180deg,transparent 60%,rgba(15,42,31,.7))}
+    .clinical-body{padding:40px 24px}
+    .clinical-body h2{font-size:28px}
+    .clinical-stats{gap:12px}
+    .clinical-stats .stat-num{font-size:30px}
+    .clinical-stats .stat-lbl{font-size:10px}
+    .faq-q{font-size:17px;padding:18px 22px;gap:14px}
+    .faq-a{padding:0 22px;font-size:15px}
+    .faq-item.open .faq-a{padding:0 22px 20px}
+    .final h2{font-size:36px}
+    .final .tagline{font-size:20px}
+    .final-price .n{font-size:52px}
+    .final-price .o{font-size:22px}
+    .final{padding:80px 0 70px}
+    .sticky-cta{padding:10px 14px;gap:10px;flex-wrap:wrap}
+    .sticky-cta .hidesm{display:none}
+    section{padding:60px 0}
+    .promise blockquote{font-size:24px;line-height:1.35}
+    .float-badge{display:none}
+    .hero p.lead{font-size:17px}
+    .hero ul.pt{font-size:14px}
+    .price-line .new{font-size:42px}
+    .price-line .old{font-size:22px}
+    .section-head{margin-bottom:38px}
+    .section-head p{font-size:17px}
+    .stack-card h2{font-size:26px}
+    .stack-row{font-size:16px;padding:14px 0}
+    .stack-row.total{font-size:18px}
+  }
+
+  /* Small phones */
+  @media (max-width:640px){
+    h1{font-size:36px;line-height:1.08}
+    h2{font-size:28px}
+    body{font-size:16px}
+    .wrap{padding:0 18px}
+
+    /* URGENCY BAR — stack cleanly on narrow screens */
+    .urgency-inner{gap:8px 14px;padding:10px 14px;font-size:12.5px;line-height:1.4}
+    .urgency-inner > span:nth-child(3){display:none} /* remove bullet separator */
+
+    /* NAV — shrink title & CTA to fit */
+    .brand{font-size:14px;gap:8px;flex:1;min-width:0}
+    .brand span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+    .brand .mark{width:26px;height:26px;font-size:12px;flex-shrink:0}
+    .nav-inner{gap:12px}
+    .nav-inner .btn{padding:9px 13px !important;font-size:13px !important;flex-shrink:0;white-space:nowrap}
+
+    /* HERO */
+    .hero{padding:32px 0 40px}
+    .hero-grid{gap:40px}
+    .hero p.lead{font-size:16px;margin:16px 0 24px}
+    .price-line{margin:4px 0 22px;gap:10px}
+    .price-line .new{font-size:38px}
+    .price-line .old{font-size:20px}
+    .btn-lg{padding:18px 28px;font-size:17px;width:100%;justify-content:center}
+    .hero ul.pt{font-size:13.5px;margin-top:18px}
+    .hero ul.pt li{line-height:1.5}
+
+    /* BOOK — smaller so it fits 375px viewport w/ padding */
+    .book{width:260px;height:365px}
+    .book-cover{padding:20px 18px}
+    .book-topband{font-size:8px;padding:5px 0;margin-bottom:10px}
+    .book-byline{font-size:11px}
+    .book-byline b{font-size:12px !important}
+    .book-title{font-size:22px}
+    .book-title .big{font-size:28px}
+    .book-img{margin-top:12px}
+    .book-quote{width:72px;font-size:7px;padding:5px 7px;right:3px;top:54%}
+    .book-bottomband{font-size:10px;letter-spacing:.02em;margin-top:8px;line-height:1.3}
+
+    /* SECTIONS */
+    section{padding:52px 0}
+
+    /* CHECKLIST */
+    .check-item{padding:16px 18px;gap:14px}
+    .check-item .txt{font-size:15px}
+    .check-box{width:24px;height:24px}
+
+    /* PROMISE */
+    .promise blockquote{font-size:21px}
+    .promise cite{font-size:12px}
+
+    /* RITUAL */
+    .ritual-list{gap:18px}
+    .ritual-list li{gap:14px}
+    .ritual-list h4{font-size:19px}
+    .ritual-list p{font-size:14px}
+
+    /* CLINICAL */
+    .clinical-body{padding:36px 20px}
+    .clinical-body h2{font-size:24px}
+    .clinical-body p{font-size:15px}
+    .clinical-stats{gap:10px;margin-top:22px;padding-top:22px}
+    .clinical-stats .stat-num{font-size:26px}
+    .clinical-stats .stat-lbl{font-size:9.5px;letter-spacing:.1em}
+
+    /* BEFORE/AFTER */
+    .ba-card{padding:26px 22px}
+    .ba-card h3{font-size:20px}
+
+    /* CHAPTERS */
+    .chapter{padding:22px;margin-bottom:16px}
+    .chap-img{height:160px}
+    .chap-title{font-size:21px}
+    .chap-desc{font-size:14px}
+    .chap-more-badge{width:56px;height:56px;font-size:22px;margin-bottom:14px}
+    .chap-more-list{grid-template-columns:1fr !important}
+
+    /* BONUS */
+    .bonus-card{padding:24px}
+    .bonus-card h3{font-size:20px}
+    .bonus-card .desc{font-size:14px}
+
+    /* STACK CARD */
+    .stack-card{padding:32px 22px;border-radius:14px}
+    .stack-card h2{font-size:23px;margin-bottom:22px}
+    .stack-row{font-size:15px;padding:13px 0}
+    .stack-row.total{font-size:17px}
+    .stack-price .now{font-size:38px}
+    .stack-price .old{font-size:20px;margin-right:8px;display:block;margin-bottom:4px}
+    .stack-price .save{display:block;margin:6px 0 0 0}
+
+    /* GUARANTEE */
+    .guarantee{padding:28px 22px;gap:24px}
+    .guarantee h3{font-size:22px}
+    .seal{width:120px;height:120px}
+    .seal .num{font-size:30px}
+
+    /* TESTIMONIALS */
+    .testi{padding:24px 22px}
+    .testi blockquote{font-size:15px}
+
+    /* ABOUT */
+    .about p{font-size:16px}
+    .about .cred{font-size:11px;padding:5px 10px}
+
+    /* FAQ */
+    .faq-q{font-size:16px;padding:16px 18px}
+    .faq-q .ic{font-size:24px}
+    .faq-a{padding:0 18px}
+    .faq-item.open .faq-a{padding:0 18px 18px}
+
+    /* FINAL */
+    .final{padding:64px 0 56px}
+    .final h2{font-size:30px}
+    .final .tagline{font-size:18px;margin-bottom:20px}
+    .final p.lede{font-size:15.5px;margin-bottom:26px}
+    .final-price{margin:24px 0 8px}
+    .final-price .n{font-size:46px}
+    .final-price .o{font-size:20px;display:block;margin:0 0 4px 0}
+    .trust-row{gap:16px;margin-top:24px;font-size:12.5px}
+    .pay-seals{gap:10px;margin-top:22px}
+    .pay-seals .seal-box{padding:6px 11px;font-size:11px}
+
+    /* STICKY CTA — compact on mobile, big tap target */
+    .sticky-cta{padding:10px 12px;gap:10px;justify-content:space-between}
+    .sticky-cta .st-title{display:none}
+    .sticky-cta .st-price .n{font-size:19px}
+    .sticky-cta .btn{padding:12px 18px;font-size:14px;flex-shrink:0}
+
+    /* FLOAT badges already hidden */
+  }
+
+  /* Extra-small phones (iPhone SE / 360px) */
+  @media (max-width:400px){
+    h1{font-size:32px}
+    h2{font-size:26px}
+    .wrap{padding:0 16px}
+    .book{width:240px;height:336px}
+    .book-title{font-size:20px}
+    .book-title .big{font-size:26px}
+    .final h2{font-size:27px}
+    .final-price .n{font-size:40px}
+    .stack-card{padding:28px 18px}
+    .stack-price .now{font-size:34px}
+    .urgency-inner{font-size:11.5px;padding:9px 12px}
+    .urgency-inner .cd b{padding:1px 6px}
+    .check-item{padding:14px 16px;gap:12px}
+    .check-item .txt{font-size:14px}
+    .nav-inner .btn{padding:8px 11px !important;font-size:12px !important}
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== URGENCY BAR ========== -->
+<div class="urgency-bar">
+  <div class="urgency-inner">
+    <span class="dot"></span>
+    <span>Introductory pricing ends in <span class="cd" id="cd"><b>00</b>h <b>00</b>m <b>00</b>s</span></span>
+    <span style="opacity:.7">·</span>
+    <span style="opacity:.85">Instant PDF download · 7-day guarantee</span>
+  </div>
+</div>
+
+<!-- ========== NAV ========== -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <div class="brand">
+      <div class="mark">B</div>
+      <span>The Morning Unclog Protocol</span>
+    </div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#inside">What's Inside</a>
+      <a href="#bonuses">Bonuses</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a class="btn" href="#order" style="padding:12px 20px;font-size:14px">Get the Book</a>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">A Cardiologist's Morning Protocol · For Ages 60+</div>
+      <h1 class="serif" style="margin-top:18px">The Morning Unclog Protocol</h1>
+      <div style="font-family:'Libre Caslon Text',serif;font-style:italic;font-size:24px;color:var(--green);margin-top:14px;line-height:1.3;max-width:540px">How to unclog your arteries &amp; lower blood pressure in <b style="font-style:normal">21 days</b>.</div>
+      <p class="lead">
+        A simple 3-ingredient morning recipe — using food you already have in your kitchen — that dissolves the <b>fibrin</b> holding cholesterol to your artery walls. Developed by <b>Dr. Booker, M.D.</b>, over 6 years of circulatory medicine.
+      </p>
+      <div class="price-line">
+        <span class="old">$42</span>
+        <span class="new">$17</span>
+      </div>
+      <a href="#order" class="btn btn-lg">
+        Get Instant Access <span class="btn-arrow">→</span>
+      </a>
+      <ul class="pt">
+        <li>Includes 3 Free Bonus Guides · PDF Format</li>
+        <li>Instant Download · 7-Day Money-Back Guarantee</li>
+        <li>By Dr. Booker, M.D. · Circulatory Health Specialist</li>
+      </ul>
+    </div>
+
+    <div class="book-parallax">
+    <div class="book-wrap">
+      <div class="float-badge badge-1">
+        <div class="ic">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--ink)">21-Day Protocol</div>
+          <div style="color:var(--muted);font-size:11px">Results tracked day by day</div>
+        </div>
+      </div>
+
+      <div class="book">
+        <div class="book-cover">
+          <div class="book-topband">A Cardiologist's Kitchen Protocol</div>
+          <div class="book-byline"><i>A Guide by</i><br><b style="font-size:15px">Dr. Booker, M.D.</b></div>
+          <div class="book-title">
+            THE MORNING
+            <span class="big">UNCLOG</span>
+            PROTOCOL
+          </div>
+
+          <div class="book-img">
+            <img class="doc-photo-book" src="images/dr-booker-hero.jpeg?v=2" alt="Dr. Booker, cardiologist" />
+            <div class="book-quote">"After 6 years treating cardiac patients, this is the one protocol I give my own family." — Dr. B</div>
+          </div>
+
+          <div class="book-bottomband">
+            <b>CLEAR YOUR ARTERIES.</b>
+            <b>LOWER YOUR PRESSURE.</b>
+            <b>RECLAIM YOUR ENERGY.</b>
+          </div>
+        </div>
+      </div>
+
+      <div class="float-badge badge-2">
+        <div class="ic" style="background:var(--green)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/></svg>
+        </div>
+        <div>
+          <div style="font-weight:700;color:var(--ink)">7-Day Guarantee</div>
+          <div style="color:var(--muted);font-size:11px">Or 100% back, no questions</div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SYMPTOM CHECKLIST ========== -->
+<section class="section-alt" id="who">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Is this for you?</div>
+      <h2>Read This If Your Body Is Already Warning You</h2>
+      <p>Most people don't notice a clogged artery until it's too late. But the body rarely fails silently — it whispers first. Check the warning signs you recognize:</p>
+    </div>
+
+    <div class="checklist-grid">
+      <div class="check-item" data-check>
+        <div class="check-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="txt">You feel a <b>numbness or tingling</b> in your legs or feet when you walk more than a block.</div>
+      </div>
+      <div class="check-item" data-check>
+        <div class="check-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="txt">Your pressure is <b>over 13/8</b> and no medication seems to keep it down for long.</div>
+      </div>
+      <div class="check-item" data-check>
+        <div class="check-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="txt">You've been on <b>statins</b> and feel muscle pain, fatigue, or "brain fog" you didn't have before.</div>
+      </div>
+      <div class="check-item" data-check>
+        <div class="check-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="txt">You wake between <b>3:00 and 4:00 AM</b> with a racing heart, pressure in your chest, or anxiety.</div>
+      </div>
+      <div class="check-item" data-check>
+        <div class="check-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="txt">You get <b>winded</b> playing with grandchildren, climbing stairs, or carrying groceries.</div>
+      </div>
+      <div class="check-item" data-check>
+        <div class="check-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div class="txt">You feel your doctor <b>rushes you</b> through 15-minute visits and prescribes more pills instead of answers.</div>
+      </div>
+    </div>
+
+    <p class="checklist-cta">If you checked even two of these, your circulatory system is asking for help. This book was written for you.</p>
+
+    <div style="text-align:center;margin-top:36px">
+      <a href="#order" class="btn btn-lg">Yes, I Want the Protocol →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROMISE QUOTE ========== -->
+<section class="promise">
+  <div class="wrap">
+    <div class="promise-grid">
+      <div class="promise-portrait">
+        <img src="images/dr-booker-quote.jpeg" alt="Portrait of Dr. Booker" />
+      </div>
+      <div class="promise-inner">
+        <div class="eyebrow" style="color:#C9A961;margin-bottom:22px">A Word From Dr. Booker</div>
+        <blockquote>
+          Your arteries are not failing because you're old. They're failing because no one ever taught you how to clean them. The kitchen is still the best pharmacy — if you know what to reach for at 6:30 in the morning.
+        </blockquote>
+        <cite>— Dr. Booker, M.D.
+          <span class="role">Cardiologist · 6 Years Clinical Practice</span>
+        </cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== MORNING RITUAL ========== -->
+<section class="ritual">
+  <div class="wrap">
+    <div class="ritual-grid">
+      <div class="ritual-photo">
+        <img src="images/dr-booker-kitchen.jpeg" alt="Dr. Booker in his kitchen with the morning recipe" />
+        <div class="ritual-tag">
+          <span class="dot"></span>
+          90-second preparation
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow">The Morning Ritual</div>
+        <h2>Three Ingredients. One Glass. Before Breakfast.</h2>
+        <p class="ritual-lead">
+          This is the same glass Dr. Booker prepares every morning in his own kitchen — the same one he hands his father, his patients, and now, you.
+        </p>
+        <ul class="ritual-list">
+          <li>
+            <div class="rnum">01</div>
+            <div>
+              <h4>Stir — not blend.</h4>
+              <p>Cold-stirring activates the enzymes that break down fibrin. Heat denatures them. This is why no one else's morning drink works.</p>
+            </div>
+          </li>
+          <li>
+            <div class="rnum">02</div>
+            <div>
+              <h4>Drink 30 minutes before food.</h4>
+              <p>On an empty stomach, the compounds travel uninterrupted to the endothelium — the inner lining of your vessels where the real cleaning happens.</p>
+            </div>
+          </li>
+          <li>
+            <div class="rnum">03</div>
+            <div>
+              <h4>Repeat for 21 days.</h4>
+              <p>The fibrin mesh doesn't dissolve overnight — but you'll feel your legs lighten within the first week, and your pressure stabilize by day fourteen.</p>
+            </div>
+          </li>
+        </ul>
+        <a href="#order" class="btn btn-lg" style="margin-top:28px">Start Tomorrow Morning →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CLINICAL EVIDENCE STRIP ========== -->
+<section class="clinical">
+  <div class="clinical-grid">
+    <div class="clinical-photo">
+      <img src="images/dr-booker-patient.jpeg" alt="Dr. Booker taking a patient's blood pressure" />
+    </div>
+    <div class="clinical-body">
+      <div class="eyebrow">From the Exam Room</div>
+      <h2 class="serif">Every number in this book came from a real cuff on a real arm.</h2>
+      <p>Over six years of clinical practice, Dr. Booker tracked the morning protocol across hundreds of patients aged 60–82. The results weren't collected from a lab — they were written down in paper charts, one appointment at a time.</p>
+      <p>The three bonus charts inside the book are the <b>actual tracking sheets</b> he hands his patients.</p>
+      <div class="clinical-stats">
+        <div><div class="stat-num">6 yrs</div><div class="stat-lbl">Clinical<br/>Observation</div></div>
+        <div><div class="stat-num">60+</div><div class="stat-lbl">Target<br/>Age Group</div></div>
+        <div><div class="stat-num">21 d</div><div class="stat-lbl">Protocol<br/>Length</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BEFORE / AFTER + SCIENCE ========== -->
+<section id="science">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The Mechanism</div>
+      <h2>Why Your Arteries Stay Clogged (And How to Reverse It)</h2>
+      <p>Cholesterol isn't the real problem. The real problem is <b>fibrin</b> — the biological "glue" that traps cholesterol against your artery walls. The protocol dissolves this glue so your body can clear what's already there.</p>
+    </div>
+
+    <div class="ba-grid">
+      <div class="ba-card before">
+        <img class="artery-vis" src="images/artery-clogged.jpeg" alt="Anatomical illustration of a clogged artery with plaque and fibrin mesh" />
+        <div class="ba-label">Before · The Clogged State</div>
+        <h3 class="serif">A narrow, inflamed pipe</h3>
+        <ul>
+          <li><span class="glyph">×</span><span>Fibrin mesh traps LDL cholesterol against the artery walls, year after year.</span></li>
+          <li><span class="glyph">×</span><span>Blood fights to pass through a narrowing channel — pressure rises to <b>14/9 or higher</b>.</span></li>
+          <li><span class="glyph">×</span><span>Legs feel heavy. Toes go numb. You wake up at 3:42 AM with your heart pounding.</span></li>
+          <li><span class="glyph">×</span><span>Statins lower the number on the blood test — but leave the plaque in place.</span></li>
+        </ul>
+      </div>
+
+      <div class="ba-arrow">
+        <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </div>
+
+      <div class="ba-card after">
+        <div class="artery-stack">
+          <img class="artery-vis artery-layer artery-layer-base" src="images/artery-clogged.jpeg" alt="" aria-hidden="true" />
+          <img class="artery-vis artery-layer artery-layer-top" src="images/artery-healthy.jpeg" alt="Anatomical illustration of a healthy, clear artery with blood flowing freely" />
+        </div>
+        <div class="ba-label">After · The Unclog Protocol</div>
+        <h3 class="serif">A wide, flowing channel</h3>
+        <ul>
+          <li><span class="glyph">✓</span><span>Fibrin dissolves over <b>21 days</b> — cholesterol loses its anchor and flushes through.</span></li>
+          <li><span class="glyph">✓</span><span>Pressure drops naturally toward <b>12/8</b>. Many readers reduce statins with their doctor's help.</span></li>
+          <li><span class="glyph">✓</span><span>Legs feel light again. Mornings start with energy, not with a pounding chest.</span></li>
+          <li><span class="glyph">✓</span><span>You're playing with your grandchildren without stopping for breath.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="ba-footnote">Results referenced reflect typical outcomes reported by readers of the protocol. Always consult your doctor before changing medication. See the 7-day guarantee for details.</p>
+  </div>
+</section>
+
+<!-- ========== WHAT'S INSIDE ========== -->
+<section class="section-alt" id="inside">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What's Inside</div>
+      <h2>A Glimpse Into the 60-Page Protocol</h2>
+      <p>Here are three of the <b>10 chapters</b> you'll find inside — written in large, readable type, with no jargon and no Latin names. The exact sequence Dr. Booker follows with his own family.</p>
+    </div>
+
+    <div>
+      <!-- Chapter 1 -->
+      <div class="chapter">
+        <div class="chap-img" style="background:linear-gradient(180deg,#4a6b4e 0,#2f4a36 100%);display:grid;place-items:center;color:#E8D9B5;font-family:'Libre Caslon Text',serif;font-size:42px">01</div>
+        <div>
+          <div class="chap-eyebrow">Chapter 1 · Dr. Booker's Warning</div>
+          <h3 class="chap-title">Why Your Current Treatment Is Failing You</h3>
+          <p class="chap-desc">The truth no 15-minute appointment has time for: why modern cardiology treats symptoms, not clogs — and the story of Patient Zero who changed how Dr. Booker practices medicine forever.</p>
+          <ul class="chap-list">
+            <li>Why statins lower numbers but not plaque</li>
+            <li>The Patient Zero case that changed everything</li>
+            <li>The "remediate, don't clean" trap of modern medicine</li>
+            <li>What your cardiologist wishes they could tell you</li>
+            <li>Why age 60+ is the critical window</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Chapter 3 -->
+      <div class="chapter">
+        <div class="chap-img" style="background:linear-gradient(180deg,#2a4c5a 0,#1a3544 100%);display:grid;place-items:center;color:#E8D9B5;font-family:'Libre Caslon Text',serif;font-size:42px">03</div>
+        <div>
+          <div class="chap-eyebrow">Chapter 3 · The Power of Enzyme Therapy</div>
+          <h3 class="chap-title">The Science Behind the 3 Ingredients</h3>
+          <p class="chap-desc">How three ordinary kitchen ingredients act as natural solvents for arterial plaque — the enzyme pathway your body stops producing after 50, and how to restart it.</p>
+          <ul class="chap-list">
+            <li>What enzyme therapy really means</li>
+            <li>The natural plaque solvents in your kitchen</li>
+            <li>Why the ratio matters more than the dose</li>
+            <li>The 90-second activation window</li>
+            <li>Clinical references, simplified</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Chapter 6 -->
+      <div class="chapter">
+        <div class="chap-img" style="background:linear-gradient(180deg,#3f5b6b 0,#263b47 100%);display:grid;place-items:center;color:#E8D9B5;font-family:'Libre Caslon Text',serif;font-size:42px">06</div>
+        <div>
+          <div class="chap-eyebrow">Chapter 6 · The 21-Day Attack Protocol</div>
+          <h3 class="chap-title">Your Day-by-Day Morning Playbook</h3>
+          <p class="chap-desc">The complete step-by-step of every morning: what to eat, how to prepare the mixture, the nitric-oxide activation windows, and what to expect week by week.</p>
+          <ul class="chap-list">
+            <li>The 90-second morning preparation</li>
+            <li>Nitric-oxide activation windows</li>
+            <li>Week 1: The "lightening" phase</li>
+            <li>Week 2: Pressure stabilization</li>
+            <li>Week 3: Energy return &amp; the test</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- More inside teaser -->
+      <div class="chapter chapter-more">
+        <div class="chap-img chap-more-badge">+7</div>
+        <div>
+          <div class="chap-eyebrow" style="color:#C9A961">And Much More Inside</div>
+          <h3 class="chap-title" style="color:#F5EFE4">7 More Chapters — 60 Pages Total</h3>
+          <p class="chap-desc" style="color:rgba(239,230,210,.85)">The full protocol also includes: the biology of fibrin, the 3 pillars (Thinner, Sweeper, Endothelial Strengthener), the senior-safe shopping list, peripheral circulation exercises, the statin conversation script, real before-and-after case studies, and Dr. Booker's closing letter with access to the private longevity community.</p>
+          <ul class="chap-list chap-more-list">
+            <li style="color:rgba(239,230,210,.8)">The Biology of the Clog</li>
+            <li style="color:rgba(239,230,210,.8)">The 3 Pillars Decoded</li>
+            <li style="color:rgba(239,230,210,.8)">60+ Shopping List &amp; Pantry Purge</li>
+            <li style="color:rgba(239,230,210,.8)">Peripheral Circulation Fix</li>
+            <li style="color:rgba(239,230,210,.8)">Maintenance &amp; Statin Review</li>
+            <li style="color:rgba(239,230,210,.8)">Before-and-After Case Studies</li>
+            <li style="color:rgba(239,230,210,.8)">Dr. Booker's Closing Letter</li>
+            <li style="color:rgba(239,230,210,.8)">+ Longevity Community Access</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:36px">
+      <a href="#order" class="btn btn-lg">Get the Full Protocol →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== BONUSES ========== -->
+<section id="bonuses">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Included Free With Your Order</div>
+      <h2>3 Bonus Guides — On The House</h2>
+      <p>When you order today, you also receive these three companion guides — designed to carry the protocol through the rest of your day, your pantry, and your doctor's office.</p>
+    </div>
+
+    <div class="bonus-grid">
+      <!-- Bonus 1 -->
+      <div class="bonus-card">
+        <div class="tag">FREE</div>
+        <div class="bonus-cover b1">
+          <div class="bnum">Bonus №1</div>
+          <div class="btitle">The Vasodilator Tea Guide</div>
+          <div class="bsub">5 Ancestral Infusions</div>
+        </div>
+        <h3 class="serif">The Vasodilator Tea Guide</h3>
+        <p class="desc">The morning recipe is step one. But what do you drink in the afternoon? Five ancestral teas — pure hibiscus, olive leaf, and three more — that relax artery walls and lower pressure while you rest.</p>
+        <div class="val"><span class="was">Value $29</span><span class="now">FREE</span></div>
+      </div>
+
+      <!-- Bonus 2 -->
+      <div class="bonus-card">
+        <div class="tag">FREE</div>
+        <div class="bonus-cover b2">
+          <div class="bnum">Bonus №2</div>
+          <div class="btitle">The Supermarket Detective</div>
+          <div class="bsub">Pocket Label Guide</div>
+        </div>
+        <h3 class="serif">The Supermarket Detective</h3>
+        <p class="desc">A visual guide for reading labels at 60+. The 5 hidden preservatives and sodium names that can silently undo a week of your morning protocol — and how to spot them in 3 seconds.</p>
+        <div class="val"><span class="was">Value $19</span><span class="now">FREE</span></div>
+      </div>
+
+      <!-- Bonus 3 -->
+      <div class="bonus-card">
+        <div class="tag">FREE</div>
+        <div class="bonus-cover b3">
+          <div class="bnum">Bonus №3</div>
+          <div class="btitle">The 12/8 Control Journal</div>
+          <div class="bsub">Printable · Large Type</div>
+        </div>
+        <h3 class="serif">The 12/8 Control Journal</h3>
+        <p class="desc">Don't trust memory. A printable, large-type journal to record your pressure, energy, and weight each day. The exact document to bring to your next appointment to prove your progress — and justify lowering medication.</p>
+        <div class="val"><span class="was">Value $15</span><span class="now">FREE</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== VALUE STACK + ORDER ========== -->
+<section class="section-alt" id="order">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Your Complete Package</div>
+      <h2>Everything You Need for a Clear Circulatory System</h2>
+      <p>The main book plus all three bonuses — a complete kitchen pharmacy for the over-60 heart.</p>
+    </div>
+
+    <div class="stack-card">
+      <div class="eyebrow" style="text-align:center">The Full Package</div>
+      <h2>Total Value<br/><span style="font-style:italic;color:#C9A961">vs. Your Price Today</span></h2>
+
+      <div class="stack-rows">
+        <div class="stack-row">
+          <span>The Morning Unclog Protocol <em style="opacity:.7">(Main Book · 60 Pages)</em></span>
+          <span class="val">$97</span>
+        </div>
+        <div class="stack-row">
+          <span>+ Bonus №1 · Vasodilator Tea Guide</span>
+          <span class="val">$29</span>
+        </div>
+        <div class="stack-row">
+          <span>+ Bonus №2 · Supermarket Detective</span>
+          <span class="val">$19</span>
+        </div>
+        <div class="stack-row">
+          <span>+ Bonus №3 · 12/8 Control Journal</span>
+          <span class="val">$15</span>
+        </div>
+        <div class="stack-row total">
+          <span>Total Value</span>
+          <span class="val">$160</span>
+        </div>
+      </div>
+
+      <div class="stack-price">
+        <div style="font-size:13px;letter-spacing:.2em;color:#C9A961;text-transform:uppercase;font-weight:600;margin-bottom:10px">Today Only</div>
+        <span class="old">$42</span>
+        <span class="now">$17</span>
+        <span class="save">Save 60%</span>
+      </div>
+
+      <div class="stack-cta">
+        <!-- TODO: replace href="#" with the Whop or Stripe checkout URL -->
+        <a href="#" class="btn btn-lg" style="background:#2F8F48">
+          Get Instant Access — $17 →
+        </a>
+      </div>
+      <p class="stack-fine">Instant PDF download · Secure checkout · 7-day money-back guarantee</p>
+    </div>
+
+    <!-- GUARANTEE -->
+    <div class="guarantee">
+      <div class="seal">
+        <div>
+          <div class="sub">Our</div>
+          <div class="num">7</div>
+          <div class="lbl">Day Guarantee</div>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow" style="color:var(--gold)">Your Risk-Free Promise</div>
+        <h3>Read it. Try it. If it doesn't move the needle — get every cent back.</h3>
+        <p>Download the book. Try the morning recipe for seven days. If your legs don't feel lighter, if your pressure hasn't started dropping, if anything feels off — email us. We refund the full $17, you keep all three bonuses. No forms. No calls. No questions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TESTIMONIALS ========== -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Reader Stories</div>
+      <h2>What 21 Days Can Look Like</h2>
+      <p>Real letters from readers who started the protocol this year. Names and cities shared with permission.</p>
+    </div>
+
+    <div class="testi-grid">
+      <div class="testi">
+        <div class="testi-top">
+          <div class="testi-ava">
+            <div class="testi-ava-inner"><img src="images/review-raymond.jpeg" alt="Raymond T." /></div>
+          </div>
+          <div>
+            <div class="testi-name">Raymond T.</div>
+            <div class="testi-meta">68 · Dallas, TX</div>
+          </div>
+          <div class="testi-stars" style="margin-left:auto">★★★★★</div>
+        </div>
+        <blockquote>"Day 14 my morning pressure was 12/8 for the first time in four years. My doctor looked at my chart twice. I'm cutting my dose in half next month."</blockquote>
+        <div class="result"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Pressure dropped 14/9 → 12/8</div>
+      </div>
+
+      <div class="testi">
+        <div class="testi-top">
+          <div class="testi-ava">
+            <div class="testi-ava-inner"><img src="images/review-patricia.jpeg" alt="Patricia W." /></div>
+          </div>
+          <div>
+            <div class="testi-name">Patricia W.</div>
+            <div class="testi-meta">71 · Atlanta, GA</div>
+          </div>
+          <div class="testi-stars" style="margin-left:auto">★★★★★</div>
+        </div>
+        <blockquote>"The tingling in my feet stopped by day nine. I haven't felt my toes this warm since I was sixty. I'm keeping up with my grandson at the park again."</blockquote>
+        <div class="result"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Numbness gone · Energy back</div>
+      </div>
+
+      <div class="testi">
+        <div class="testi-top">
+          <div class="testi-ava">
+            <div class="testi-ava-inner"><img src="images/review-walter.jpeg" alt="Walter H." /></div>
+          </div>
+          <div>
+            <div class="testi-name">Walter H.</div>
+            <div class="testi-meta">74 · Phoenix, AZ</div>
+          </div>
+          <div class="testi-stars" style="margin-left:auto">★★★★★</div>
+        </div>
+        <blockquote>"I was waking up at 3:42 AM every single night with my heart racing. Two weeks in — I slept through. My wife cried. I've never written a review before. Thank you, Dr. Booker."</blockquote>
+        <div class="result"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg> Sleeping through the night</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:40px">
+      <a href="#order" class="btn btn-lg">I Want These Results →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ABOUT DOCTOR ========== -->
+<section class="section-alt" id="about">
+  <div class="wrap">
+    <div class="about">
+      <div class="doc-photo">
+        <img src="images/dr-booker-about.jpeg" alt="Dr. Booker at his desk" />
+        <div class="doc-photo-frame-overlay"></div>
+        <div class="doc-photo-caption">Dr. Booker at his desk, writing for his patients.</div>
+      </div>
+      <div>
+        <div class="eyebrow">About the Author</div>
+        <h2>Dr. Booker, M.D.</h2>
+        <div class="credentials">
+          <span class="cred">Cardiologist</span>
+          <span class="cred">6 Years Clinical Practice</span>
+          <span class="cred">Circulatory Health</span>
+        </div>
+        <p>For six years I sat across from the same kind of patient. A man in his late sixties. Tired. On three medications. Asking me — quietly — <b>"Doctor, is this it?"</b></p>
+        <p>The hospital gave me fifteen minutes. Fifteen minutes to explain what a lifetime of clogged arteries means. Fifteen minutes to prescribe another statin and send him home.</p>
+        <p>I couldn't do it anymore. So I wrote this book. Everything I wish I could say in a full hour — the morning recipe my own father uses, the three questions every cardiologist should ask, the journal that changed the conversation with my patients.</p>
+        <p><b>If your doctor won't give you an hour, at least let me give you 60 pages.</b></p>
+        <div class="sig-row">
+          <div class="sig-headshot"><img src="images/dr-booker-scrubs.jpeg" alt="Dr. Booker" /></div>
+          <div>
+            <div class="sig">— Dr. Booker, M.D.</div>
+            <div class="sig-sub">Cardiologist · Author of The Morning Unclog Protocol</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Frequently Asked</div>
+      <h2>The Questions Readers Ask Most</h2>
+    </div>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q">Do I have to stop my current medication?<span class="ic">+</span></button>
+        <div class="faq-a"><p>No. The protocol is designed to work <em>alongside</em> your current prescriptions. Many readers only discuss reducing medication with their doctor after week three — and only when their pressure has stabilized. The book includes the exact printable chart and conversation to bring to that appointment.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">I'm 72 — is this still safe for me?<span class="ic">+</span></button>
+        <div class="faq-a"><p>The protocol was written for readers 60 and above. The book includes specific adjustments for ages 70+, for diabetics, and for anyone on blood thinners. If you have any unusual condition, Dr. Booker still recommends mentioning the recipe to your doctor before day one.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What are the 3 ingredients?<span class="ic">+</span></button>
+        <div class="faq-a"><p>All three are common pantry items — nothing you have to order or import. Two are likely already in your kitchen. The ratio, timing, and preparation method is what makes the difference — that's the core of Chapter One.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How soon will I feel a difference?<span class="ic">+</span></button>
+        <div class="faq-a"><p>Most readers report the first "lightness" in the legs within 7 to 10 days. Pressure stabilization typically begins in week two. Full cycle results — what Dr. Booker calls the "clear channel" — land around day 21. Individual results vary; the 7-day guarantee gives you room to see for yourself.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is this a physical book or digital?<span class="ic">+</span></button>
+        <div class="faq-a"><p>Digital — instant PDF download. You can read it on any phone, tablet, or computer, or print the large-type version at home. We chose this format so you can start <em>tomorrow morning</em>, not next week.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What if it doesn't work for me?<span class="ic">+</span></button>
+        <div class="faq-a"><p>Email us within 7 days and we refund the full $17 — you keep the three bonus guides. No forms, no phone calls, no "are you sure?" emails. That's the promise.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="final">
+  <div class="wrap">
+    <div class="eyebrow" style="color:#C9A961">Start Tomorrow Morning</div>
+    <h2 class="serif">Your Arteries Can't Wait Another Night</h2>
+    <div class="tagline">Clear the glue. Open the channel. Get your energy back.</div>
+    <p class="lede">
+      The recipe takes 90 seconds to prepare. The results begin within seven days. Your grandchildren are waiting for you at the park — and your heart has been asking, quietly, for help.
+    </p>
+
+    <div class="ebtag">Main Book + 3 Bonus Guides</div>
+    <div class="final-price">
+      <span class="o">$42</span>
+      <span class="n">$17</span>
+      <span class="save">Save 60%</span>
+    </div>
+
+    <div style="margin-top:24px">
+      <!-- TODO: replace href="#" with the Whop or Stripe checkout URL -->
+      <a href="#" class="btn btn-lg" style="background:#2F8F48;padding:24px 42px;font-size:21px">
+        Yes, I Want the Protocol Today →
+      </a>
+    </div>
+
+    <div class="trust-row">
+      <span>Instant PDF download</span>
+      <span>7-day money-back guarantee</span>
+      <span>Secure checkout</span>
+      <span>By Dr. Booker, M.D.</span>
+    </div>
+
+    <div class="pay-seals">
+      <div class="seal-box">
+        <svg width="18" height="14" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#1A1F71"/><text x="24" y="21" text-anchor="middle" fill="white" font-family="Arial" font-weight="700" font-size="12">VISA</text></svg>
+      </div>
+      <div class="seal-box">
+        <svg width="22" height="14" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#000"/><circle cx="20" cy="16" r="8" fill="#EB001B"/><circle cx="28" cy="16" r="8" fill="#F79E1B" opacity=".85"/></svg>
+      </div>
+      <div class="seal-box">
+        <svg width="18" height="14" viewBox="0 0 48 32" fill="none"><rect width="48" height="32" rx="4" fill="#003087"/><text x="24" y="21" text-anchor="middle" fill="#009CDE" font-family="Arial" font-weight="700" font-size="11" font-style="italic">PayPal</text></svg>
+      </div>
+      <div class="seal-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A961" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        SSL SECURE
+      </div>
+      <div class="seal-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C9A961" stroke-width="2"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/></svg>
+        GUARANTEED
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="wrap">
+    <div class="brand" style="justify-content:center;color:#C9A961;margin-bottom:10px">
+      <span>The Morning Unclog Protocol · by Dr. Booker, M.D.</span>
+    </div>
+    <div>© 2026 · All rights reserved · <a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Contact</a></div>
+    <p class="disclaimer">
+      The information in this book is for educational purposes only. It is not intended to diagnose, treat, or cure any medical condition. Always consult your personal physician before starting any new protocol, changing your diet, or adjusting any prescription medication. Individual results vary.
+    </p>
+  </div>
+</footer>
+
+<!-- ========== STICKY CTA ========== -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="st-title hidesm">The Morning Unclog Protocol</div>
+  <div class="st-price">
+    <span class="o">$42</span><span class="n">$17</span>
+  </div>
+  <a href="#order" class="btn">Get Instant Access →</a>
+</div>
+
+<script>
+  // --- Checklist toggle ---
+  document.querySelectorAll('[data-check]').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('checked'));
+  });
+
+  // --- FAQ accordion ---
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('open');
+    });
+  });
+
+  // --- Sticky CTA show on scroll past hero ---
+  const sticky = document.getElementById('stickyCta');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > window.innerHeight * 0.8) sticky.classList.add('show');
+    else sticky.classList.remove('show');
+  });
+
+  // --- Countdown (24h rolling, stored in localStorage) ---
+  (function(){
+    const KEY = 'booker_cd_end';
+    let end = parseInt(localStorage.getItem(KEY)||'0',10);
+    const now = Date.now();
+    if (!end || end < now) {
+      end = now + 24*60*60*1000;
+      localStorage.setItem(KEY, end);
+    }
+    const el = document.getElementById('cd');
+    function tick(){
+      const diff = Math.max(0, end - Date.now());
+      const h = Math.floor(diff/3600000);
+      const m = Math.floor((diff%3600000)/60000);
+      const s = Math.floor((diff%60000)/1000);
+      const p = n => String(n).padStart(2,'0');
+      el.innerHTML = `<b>${p(h)}</b>h <b>${p(m)}</b>m <b>${p(s)}</b>s`;
+    }
+    tick(); setInterval(tick,1000);
+  })();
+
+  // ========== SCROLL REVEAL ==========
+  (function(){
+    // auto-tag many elements as reveal
+    const selectors = [
+      '.section-head','.chapter','.bonus-card','.testi','.faq-item',
+      '.ba-card','.stack-card','.guarantee','.about',
+      '.check-item','.ritual-list li','.clinical-stats > div',
+      '.promise-grid','.ritual-grid','.ba-grid > *',
+      '.final h2','.final .lede','.final-price','.final .btn'
+    ];
+    const els = document.querySelectorAll(selectors.join(','));
+    els.forEach(el=>el.classList.add('reveal'));
+
+    if(!('IntersectionObserver' in window)){
+      els.forEach(el=>el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    },{threshold:.12, rootMargin:'0px 0px -40px 0px'});
+    els.forEach(el=>io.observe(el));
+  })();
+
+  // ========== NUMBER COUNTERS (Clinical Evidence) ==========
+  (function(){
+    const nums = document.querySelectorAll('.clinical-stats .stat-num');
+    if(!nums.length) return;
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    function animateNum(el, to, suffix){
+      const dur = 1400, start = performance.now();
+      function step(now){
+        const p = Math.min(1,(now-start)/dur);
+        const v = Math.round(to * ease(p));
+        el.textContent = v + suffix;
+        if(p<1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    const targets = [
+      {num:6, suffix:' yrs'},
+      {num:60, suffix:'+'},
+      {num:21, suffix:' d'}
+    ];
+    if('IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(e.isIntersecting){
+            nums.forEach((n,i)=>{
+              if(targets[i]) animateNum(n, targets[i].num, targets[i].suffix);
+            });
+            io.disconnect();
+          }
+        });
+      },{threshold:.4});
+      io.observe(nums[0].closest('.clinical-stats'));
+    }
+  })();
+
+  // ========== NEW SUBTLE ANIMATIONS (50+ friendly) ==========
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- Hero book parallax (very subtle, ~0.04x scroll offset) ---
+  (function(){
+    if (prefersReducedMotion) return;
+    const el = document.querySelector('.book-parallax');
+    const hero = document.querySelector('.hero');
+    if (!el || !hero) return;
+    let ticking = false;
+    function update(){
+      const rect = hero.getBoundingClientRect();
+      if (rect.bottom > -80 && rect.top < window.innerHeight + 80) {
+        const offset = Math.max(-24, Math.min(24, window.scrollY * -0.04));
+        el.style.transform = 'translate3d(0,' + offset + 'px,0)';
+      }
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking){ ticking = true; requestAnimationFrame(update); }
+    }, {passive:true});
+    update();
+  })();
+
+  // --- Price count-up ($42 → $17) when stack-card scrolls into view ---
+  (function(){
+    const priceEl = document.querySelector('.stack-price .now');
+    if (!priceEl) return;
+    const from = 42, to = 17, dur = 1300;
+    const ease = t => 1 - Math.pow(1 - t, 3);
+    function run(){
+      if (prefersReducedMotion){ priceEl.textContent = '$' + to; return; }
+      const start = performance.now();
+      (function step(now){
+        const p = Math.min(1, (now - start) / dur);
+        priceEl.textContent = '$' + Math.round(from + (to - from) * ease(p));
+        if (p < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }
+    if ('IntersectionObserver' in window){
+      const io = new IntersectionObserver((entries, o) => {
+        entries.forEach(e => { if (e.isIntersecting){ run(); o.disconnect(); }});
+      }, {threshold:.35});
+      io.observe(priceEl.closest('.stack-card') || priceEl);
+    } else { run(); }
+  })();
+
+  // --- Testimonial card subtle 3D tilt (max 3°, 50+ friendly) ---
+  (function(){
+    if (prefersReducedMotion) return;
+    if (window.matchMedia('(hover: none)').matches) return; // skip on touch
+    const cards = document.querySelectorAll('.testi');
+    const MAX = 3;
+    cards.forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.transform =
+          'perspective(1000px) translateY(-4px) rotateX(' + (-y*MAX) + 'deg) rotateY(' + (x*MAX) + 'deg)';
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  })();
+
+  // --- Artery "healing" crossfade when After card enters viewport ---
+  (function(){
+    const card = document.querySelector('.ba-card.after');
+    if (!card) return;
+    if (prefersReducedMotion || !('IntersectionObserver' in window)){
+      card.classList.add('morphed'); return;
+    }
+    const io = new IntersectionObserver((entries, o) => {
+      entries.forEach(e => { if (e.isIntersecting){ card.classList.add('morphed'); o.disconnect(); }});
+    }, {threshold:.45});
+    io.observe(card);
+  })();
+</script>
+
+</body>
+</html>
